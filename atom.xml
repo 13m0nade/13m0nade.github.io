@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://13m0nade.github.io/"/>
-  <updated>2019-07-28T12:33:12.365Z</updated>
+  <updated>2019-07-28T12:37:26.505Z</updated>
   <id>https://13m0nade.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://13m0nade.github.io/2019/07/28/hexo%E5%8D%9A%E5%AE%A2%E7%9A%84%E9%9B%B7%E5%8C%BA/"/>
     <id>https://13m0nade.github.io/2019/07/28/hexo博客的雷区/</id>
     <published>2019-07-28T12:12:07.000Z</published>
-    <updated>2019-07-28T12:33:12.365Z</updated>
+    <updated>2019-07-28T12:37:26.505Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="hexo搭博客的雷区"><a href="#hexo搭博客的雷区" class="headerlink" title="hexo搭博客的雷区"></a>hexo搭博客的雷区</h1><p>  最近心血来潮，搭了一个博客，奈何本人太菜，入了不少坑，并且发现网上关于使用hexo搭博客的教程有许多的遗漏。现写此文章来纪念我踩过的那些雷。</p><hr><h5 id="GitHub"><a href="#GitHub" class="headerlink" title="GitHub"></a>GitHub</h5><p>git gitcore必须放入环境变量。<br>用hexo搭博客的前提是你要拥有一个GitHub账号，登入创建项目，注意项目名必须为 <strong>username.github.io</strong>。创建完后可在右上角setting处github page 看到自己的域名（需要选一个主题），在浏览器中输入即可访问。（此过程有些缓慢，后期可将自己购买的域名解析到博客）</p><h5 id="git"><a href="#git" class="headerlink" title="git"></a>git</h5><p>git的作用是部署博客，在安装过程中有一步是选择运行的环境，这里我们选择在git bash下运行（不能在cmd下运行，后续操作须在bash下进行），若一定要在命令行运行可在安装时选择cmd，此模式下会有部分冲突，萌新慎选。</p><h5 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h5><p>hexo的配置是最复杂也是雷区最多的，首先在安装时需要安装插件，网上绝大多数博客只说了npm install，这条指令不能安装所有的插件，就像是把hexo部署到GitHub需要的hexo-deployer-git就无法安装，导致笔者一直无法部署，耗了很长时间，找了无数教程才解决。可以通过npm install hexo-deployer-git –save 安装，其他插件同理。<br>要将hexo部署成功需要对_config.yml文件进行修改，其中需要注意的是repository位在github clone处的ssh地址。最坑的来了这里冒号后有两个空格，两个空格，两个空格，重要的事说三遍。</p><p>deploy:<br>  type:  git<br>  repository:  <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:username/username.github.io.git<br>  branch:  master</p><h5 id="ending"><a href="#ending" class="headerlink" title="ending"></a>ending</h5><p>配置完之后就可以进行个性化和写博客了，注意每次的修改都需要使用hexo g 生成，hexo d 部署。使用hexo s 在浏览器输入localhost:4000即可预览博客。</p><h5 id="报错解决"><a href="#报错解决" class="headerlink" title="报错解决"></a>报错解决</h5><p>再部署中出现spawn failed报错，首先检查git是否加入环境变量，然后删除博客目录下.git文件夹。具体操作如下：</p><ul><li>hexo clean</li><li>hexo g</li><li>hexo d</li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="hexo搭博客的雷区"><a href="#hexo搭博客的雷区" class="headerlink" title="hexo搭博客的雷区"></a>hexo搭博客的雷区</h1><p>  最近心血来潮，搭了一个博客，奈何本人太菜，入了不少坑，并且发现网上关于使用hexo搭博客的教程有许多的遗漏。现写此文章来纪念我踩过的那些雷。</p><hr><h5 id="GitHub"><a href="#GitHub" class="headerlink" title="GitHub"></a>GitHub</h5><p>git gitcore必须放入环境变量。<br>用hexo搭博客的前提是你要拥有一个GitHub账号，登入创建项目，注意项目名必须为 <strong>username.github.io</strong>。创建完后可在右上角setting处github page 看到自己的域名，在浏览器中输入即可访问。（此过程有些缓慢，后期可将自己购买的域名解析到博客）</p><h5 id="git"><a href="#git" class="headerlink" title="git"></a>git</h5><p>git的作用是部署博客，在安装过程中有一步是选择运行的环境，这里我们选择在git bash下运行（不能在cmd下运行，后续操作须在bash下进行），若一定要在命令行运行可在安装时选择cmd，此模式下会有部分冲突，萌新慎选。</p><h5 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h5><p>hexo的配置是最复杂也是雷区最多的，首先在安装时需要安装插件，网上绝大多数博客只说了npm install，这条指令不能安装所有的插件，就像是把hexo部署到GitHub需要的hexo-deployer-git就无法安装，导致笔者一直无法部署，耗了很长时间，找了无数教程才解决。可以通过npm install hexo-deployer-git –save 安装，其他插件同理。<br>要将hexo部署成功需要对_config.yml文件进行修改，其中需要注意的是repository位在github clone处的ssh地址。最坑的来了这里冒号后有两个空格，两个空格，两个空格，重要的事说三遍。</p><p>deploy:<br>  type:  git<br>  repository:  <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:username/username.github.io.git<br>  branch:  master</p><h5 id="ending"><a href="#ending" class="headerlink" title="ending"></a>ending</h5><p>配置完之后就可以进行个性化和写博客了，注意每次的修改都需要使用hexo g 生成，hexo d 部署。使用hexo s 在浏览器输入localhost:4000即可预览博客。</p><h5 id="报错解决"><a href="#报错解决" class="headerlink" title="报错解决"></a>报错解决</h5><p>再部署中出现spawn failed报错，首先检查git是否加入环境变量，然后删除博客目录下.git文件夹。具体操作如下：</p><ul><li>hexo clean</li><li>hexo g</li><li>hexo d</li></ul>]]></content>
     
     <summary type="html">
     
