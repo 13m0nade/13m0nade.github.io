@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>浅识正则表达式 | 13mnade&#39;s blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="正则表达式,">
+  
+
+  <meta name="description" content="元字符    代码/语法 说明     * 重复零次或更多次   + 重复一次或更多次   ? 重复零次或一次   {n} 重复n次   {n,} 重复n次或更多次   {n,m} 重复n到m次    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(\b)。(* 匹配零次或任意次，后面会讲) 字符">
+<meta name="keywords" content="正则表达式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅识正则表达式">
+<meta property="og:url" content="https://13m0nade.github.io/2019/07/30/浅识正则表达式/index.html">
+<meta property="og:site_name" content="13mnade&#39;s blog">
+<meta property="og:description" content="元字符    代码/语法 说明     * 重复零次或更多次   + 重复一次或更多次   ? 重复零次或一次   {n} 重复n次   {n,} 重复n次或更多次   {n,m} 重复n到m次    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(\b)。(* 匹配零次或任意次，后面会讲) 字符">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-30T06:57:42.835Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅识正则表达式">
+<meta name="twitter:description" content="元字符    代码/语法 说明     * 重复零次或更多次   + 重复一次或更多次   ? 重复零次或一次   {n} 重复n次   {n,} 重复n次或更多次   {n,m} 重复n到m次    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(\b)。(* 匹配零次或任意次，后面会讲) 字符">
+
+  
+
+  
+    <link rel="icon" href="/images/tea.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/link/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">元字符</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">字符转义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">重复</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">字符类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">分支条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">分组</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">反义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">后向引用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">零宽断言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">负向零宽断言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">注释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">贪婪与懒惰</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-浅识正则表达式" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">浅识正则表达式</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.07.30</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>13m0nade</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/web入门/">web入门</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1>元字符</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">代码/语法</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">*</td>
+<td style="text-align:center">重复零次或更多次</td>
+</tr>
+<tr>
+<td style="text-align:center">+</td>
+<td style="text-align:center">重复一次或更多次</td>
+</tr>
+<tr>
+<td style="text-align:center">?</td>
+<td style="text-align:center">重复零次或一次</td>
+</tr>
+<tr>
+<td style="text-align:center">{n}</td>
+<td style="text-align:center">重复n次</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,}</td>
+<td style="text-align:center">重复n次或更多次</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,m}</td>
+<td style="text-align:center">重复n到m次</td>
+</tr>
+</tbody>
+</table>
+<p>示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(\b)。(* 匹配零次或任意次，后面会讲)</p>
+<h1>字符转义</h1>
+<p>如果你想查找元字符本身的话，比如你查找.,或者*,就出现了问题：你没办法指定它们，因为它们会被解释成别的意思。这时你就得使用\来取消这些字符的特殊意义。因此，你应该使用.和*。当然，要查找\本身，你也得用\.</p>
+<p>示例：<a href="http://deerchao.xn--netdeerchao-1p1se075d.net" target="_blank" rel="noopener">deerchao.net匹配deerchao.net</a>，C:\Windows匹配C:\Windows。</p>
+<h1>重复</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">+</td>
+<td style="text-align:center">重复一次或更多次</td>
+</tr>
+<tr>
+<td style="text-align:center">?</td>
+<td style="text-align:center">重复零次或一次</td>
+</tr>
+<tr>
+<td style="text-align:center">{n}</td>
+<td style="text-align:center">重复n次</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,}</td>
+<td style="text-align:center">重复n次或更多次</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,m}</td>
+<td style="text-align:center">重复n到m次</td>
+</tr>
+<tr>
+<td style="text-align:center">*</td>
+<td style="text-align:center">重复零次或更多次</td>
+</tr>
+</tbody>
+</table>
+<p>示例：一个网站如果要求你填写的QQ号必须为5位到12位数字时，可以使用：^\d{5,12}$</p>
+<h1>字符类</h1>
+<p>如果你想匹配没有预定义元字符的字符集合(比如元音字母a,e,i,o,u)，只需要在方括号里列出它们就行了，像[aeiou]就匹配任何一个英文元音字母，[.?!]匹配标点符号(.或?或!)。</p>
+<p>示例：(?0\d{2}[) -]?\d{8}</p>
+<p>这个表达式可以匹配几种格式的电话号码，像*(010)88886666*，或<em>022-22334455</em>，或<em>02912345678</em>等。我们对它进行一些分析吧：首先是一个转义字符(,它能出现0次或1次(?),然后是一个0，后面跟着2个数字(\d{2})，然后是)或-或空格中的一个，它出现1次或不出现(?)，最后是8个数字(\d{8})。（“(”和“)”也是元字符，所以在这里需要转义）</p>
+<h1>分支条件</h1>
+<p>正则表达式里的<strong>分枝条件</strong>指的是有几种规则，如果满足其中任意一种规则都应该当成匹配，具体方法是用|把不同的规则分隔开。</p>
+<p>示例：0\d{2}-\d{8}|0\d{3}-\d{7}这个表达式能匹配两种以连字号分隔的电话号码：一种是三位区号，8位本地号(如010-12345678)，一种是4位区号，7位本地号(0376-2233445)。</p>
+<h1>分组</h1>
+<p>如果想要重复多个字符，你可以用小括号来指定<strong>子表达式</strong>(也叫做<strong>分组</strong>)，然后你就可以指定这个子表达式的重复次数了，你也可以对子表达式进行其它一些操作(后面会有介绍)。</p>
+<p>示例：((2[0-4]\d|25[0-5]|[01]?\d\d?).){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)  可以用来匹配ip地址（ip地址取值只能在0-255，使用分支来列出三种情况，中间&quot;.&quot;用分组解决。</p>
+<h1>反义</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">\W</td>
+<td style="text-align:center">匹配任意不是字母，数字，下划线，汉字的字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\S</td>
+<td style="text-align:center">匹配任意不是空白符的字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\D</td>
+<td style="text-align:center">匹配任意非数字的字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\B</td>
+<td style="text-align:center">匹配不是单词开头或结束的位置</td>
+</tr>
+<tr>
+<td style="text-align:center">[^X]</td>
+<td style="text-align:center">匹配除了x以外的任意字符</td>
+</tr>
+<tr>
+<td style="text-align:center">[^aeiou]</td>
+<td style="text-align:center">匹配除了aeiou这几个字母以外的任意字符</td>
+</tr>
+</tbody>
+</table>
+<p>示例：\S+  匹配不包含空白符的字符串</p>
+<h1>后向引用</h1>
+<p>使用小括号指定一个子表达式后，<strong>匹配这个子表达式的文本</strong>(也就是此分组捕获的内容)可以在表达式或其它程序中作进一步的处理。默认情况下，每个分组会自动拥有一个<strong>组号</strong>，规则是：从左向右，以分组的左括号为标志，第一个出现的分组的组号为1，第二个为2，以此类推。<strong>后向引用</strong>用于重复搜索前面某个分组匹配的文本。</p>
+<p>示例：\b(\w+)\b\s+\1\b可以用来匹配重复的单词，像<em>go go</em>, 或者<em>kitty kitty</em>。这个表达式首先是一个单词，也就是单词开始处和结束处之间的多于一个的字母或数字(\b(\w+)\b)，这个单词会被捕获到编号为1的分组中，然后是1个或几个空白符(\s+)，最后是分组1中捕获的内容（也就是前面匹配的那个单词）(\1)。</p>
+<h1>零宽断言</h1>
+<p>查找在某些内容(但并不包括这些内容)之前或之后的东西，也就是说它们像\b,^,$那样用于指定一个位置，这个位置应该满足一定的条件(即断言)，因此它们也被称为<strong>零宽断言</strong>。</p>
+<p>示例：(?=exp)也叫<strong>零宽度正预测先行断言</strong>，它断言自身出现的位置的后面能匹配表达式exp。比如\b\w+(?=ing\b)，匹配以ing结尾的单词的前面部分(除了ing以外的部分)。</p>
+<p>(?&lt;=exp)也叫<strong>零宽度正回顾后发断言</strong>，它断言自身出现的位置的前面能匹配表达式exp。比如(?&lt;=\bre)\w+\b会匹配以re开头的单词的后半部分(除了re以外的部分)</p>
+<h1>负向零宽断言</h1>
+<p><strong>零宽度负预测先行断言</strong>(?!exp)，断言此位置的后面不能匹配表达式exp。例如：\d{3}(?!\d)匹配三位数字，而且这三位数字的后面不能是数字；\b((?!abc)\w)+\b匹配不包含连续字符串abc的单词。</p>
+<p>同理，我们可以用(?&lt;!exp),<strong>零宽度负回顾后发断言</strong>来断言此位置的前面不能匹配表达式exp：(?&lt;![a-z])\d{7}匹配前面不是小写字母的七位数字。</p>
+<h1>注释</h1>
+<p>小括号的另一种用途是通过语法(?#comment)来包含注释。例如：2[0-4]\d(?#200-249)|25<a href="?#250-255">0-5</a>|[01]?\d\d?(?#0-199)。</p>
+<p>要包含注释的话，最好是启用“忽略模式里的空白符”选项，这样在编写表达式时能任意的添加空格，Tab，换行，而实际使用时这些都将被忽略。启用这个选项后，在#后面到这一行结束的所有文本都将被当成注释忽略掉。</p>
+<h1>贪婪与懒惰</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">*？</td>
+<td style="text-align:center">重复任意次，但尽可能少重复</td>
+</tr>
+<tr>
+<td style="text-align:center">+？</td>
+<td style="text-align:center">重复1次或更多次，但尽可能少重复</td>
+</tr>
+<tr>
+<td style="text-align:center">??</td>
+<td style="text-align:center">重复0次或1次，但尽可能少重复</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,m}?</td>
+<td style="text-align:center">重复n到m次，但尽可能少重复</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,}?</td>
+<td style="text-align:center">重复n次以上，但尽可能少重复</td>
+</tr>
+</tbody>
+</table>
+<h1>参考资料</h1>
+<p><a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="noopener">正则表达式30分钟入门教程</a></p>
+<p><a href="https://www.regular-expressions.info/" target="_blank" rel="noopener">专业正则表达式教学网站</a></p>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持13m0nade</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>走过路过不要错过~</span>
+            
+            <img src="/images/alipay.png" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/07/29/hexo搭博客的坑/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/07/30/高级PHP应用程序漏洞审核技术/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/link/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: 'b8bec8da7fe867266b4f',
+  clientSecret: '0976900ab435dd8d57a619325ae34a6ec115b876',
+  repo: 'https://13m0nade.github.io',
+  owner: '13m0nade',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: location.pathname,
+  admin: ['13m0nade'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
