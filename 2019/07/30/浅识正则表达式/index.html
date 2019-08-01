@@ -15,18 +15,18 @@
     <meta name="keywords" content="正则表达式,">
   
 
-  <meta name="description" content="元字符    代码/语法 说明     * 重复零次或更多次   + 重复一次或更多次   ? 重复零次或一次   {n} 重复n次   {n,} 重复n次或更多次   {n,m} 重复n到m次    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(\b)。(* 匹配零次或任意次，后面会讲) 字符">
+  <meta name="description" content="元字符    代码/语法 说明     . 匹配除换行符以外的任意字符   \w 匹配字母或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(">
 <meta name="keywords" content="正则表达式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅识正则表达式">
 <meta property="og:url" content="https://13m0nade.github.io/2019/07/30/浅识正则表达式/index.html">
 <meta property="og:site_name" content="13m0nade&#39;s blog">
-<meta property="og:description" content="元字符    代码/语法 说明     * 重复零次或更多次   + 重复一次或更多次   ? 重复零次或一次   {n} 重复n次   {n,} 重复n次或更多次   {n,m} 重复n到m次    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(\b)。(* 匹配零次或任意次，后面会讲) 字符">
+<meta property="og:description" content="元字符    代码/语法 说明     . 匹配除换行符以外的任意字符   \w 匹配字母或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-30T06:57:42.835Z">
+<meta property="og:updated_time" content="2019-08-01T12:05:47.817Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅识正则表达式">
-<meta name="twitter:description" content="元字符    代码/语法 说明     * 重复零次或更多次   + 重复一次或更多次   ? 重复零次或一次   {n} 重复n次   {n,} 重复n次或更多次   {n,m} 重复n到m次    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(\b)。(* 匹配零次或任意次，后面会讲) 字符">
+<meta name="twitter:description" content="元字符    代码/语法 说明     . 匹配除换行符以外的任意字符   \w 匹配字母或数字或下划线或汉字   \s 匹配任意的空白符   \d 匹配数字   \b 匹配单词的开始或结束   ^ 匹配字符串的开始   $ 匹配字符串的结束    示例：\ba\w*\b  匹配以字母a开头的单词——先是某个单词开始处(\b)，然后是字母a,然后是任意数量的字母或数字(\w*)，最后是单词结束处(">
 
   
 
@@ -59,14 +59,14 @@
 
 
   
-    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+    <span id="toolbox-mobile" class="toolbox-mobile">点我导航</span>
   
 
   <div class="post-header CENTER">
    
   <div class="toolbox">
     <a class="toolbox-entry" href="/">
-      <span class="toolbox-entry-text">导航</span>
+      <span class="toolbox-entry-text">点我导航</span>
       <i class="icon-angle-down"></i>
       <i class="icon-home"></i>
     </a>
@@ -214,28 +214,32 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">*</td>
-<td style="text-align:center">重复零次或更多次</td>
+<td style="text-align:center">.</td>
+<td style="text-align:center">匹配除换行符以外的任意字符</td>
 </tr>
 <tr>
-<td style="text-align:center">+</td>
-<td style="text-align:center">重复一次或更多次</td>
+<td style="text-align:center">\w</td>
+<td style="text-align:center">匹配字母或数字或下划线或汉字</td>
 </tr>
 <tr>
-<td style="text-align:center">?</td>
-<td style="text-align:center">重复零次或一次</td>
+<td style="text-align:center">\s</td>
+<td style="text-align:center">匹配任意的空白符</td>
 </tr>
 <tr>
-<td style="text-align:center">{n}</td>
-<td style="text-align:center">重复n次</td>
+<td style="text-align:center">\d</td>
+<td style="text-align:center">匹配数字</td>
 </tr>
 <tr>
-<td style="text-align:center">{n,}</td>
-<td style="text-align:center">重复n次或更多次</td>
+<td style="text-align:center">\b</td>
+<td style="text-align:center">匹配单词的开始或结束</td>
 </tr>
 <tr>
-<td style="text-align:center">{n,m}</td>
-<td style="text-align:center">重复n到m次</td>
+<td style="text-align:center">^</td>
+<td style="text-align:center">匹配字符串的开始</td>
+</tr>
+<tr>
+<td style="text-align:center">$</td>
+<td style="text-align:center">匹配字符串的结束</td>
 </tr>
 </tbody>
 </table>
