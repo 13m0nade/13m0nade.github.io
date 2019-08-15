@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://13m0nade.github.io/"/>
-  <updated>2019-08-06T08:28:58.922Z</updated>
+  <updated>2019-08-15T07:35:25.105Z</updated>
   <id>https://13m0nade.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>常见web源码泄露</title>
+    <link href="https://13m0nade.github.io/2019/08/15/%E5%B8%B8%E8%A7%81web%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/"/>
+    <id>https://13m0nade.github.io/2019/08/15/常见web源码泄露/</id>
+    <published>2019-08-15T07:33:10.000Z</published>
+    <updated>2019-08-15T07:35:25.105Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近刷题遇到了一道git源码泄露的题目，查阅资料发现还有许多的源码泄露，写下此文记录一下常见的源码泄漏问题。</p><h1>.git源码泄露</h1><p><strong>成因</strong>：在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。</p><p><strong>工具</strong>：<a href="https://github.com/lijiejie/GitHack" target="_blank" rel="noopener">githack</a>      <a href="https://github.com/kost/dvcs-ripper" target="_blank" rel="noopener">dvcs-ripper</a></p><p><strong>方法</strong>：</p><ol><li><a href="http://GitHack.py" target="_blank" rel="noopener">GitHack.py</a> <a href="http://www.example.com/.git/" target="_blank" rel="noopener">http://www.example.com/.git/</a></li><li><a href="http://rip-git.pl" target="_blank" rel="noopener">rip-git.pl</a> -v -u <a href="http://www.example.com/.git/" target="_blank" rel="noopener">http://www.example.com/.git/</a>  （如果想忽略SSL认证验证使用-s）</li><li>爬虫爬取整个git目录 (这个方法比较原始 , 需要具有一定的Git经验 , 这里重点介绍这种方法 , 但是这种方法和使用githack这个工具相比 , 有一个比较好的地方就是 , 可以完全模拟服务器上的代码环境 , 可以跟踪到git的每一次提交 , 但是githack好像只可以将源码恢复到最近的一次提交 , 这里的好处还有可以去查看git的提交日志 , 这个日志信息中会有开发人员对每一次commit的描述 , 比如某个BUG的修复等等 , 对于这些和BUG相关的地方 , 可以有针对性地进行白盒审计 , 有可能这个BUG修复了还不如没修复 , 可能会造成更大的漏洞)</li></ol><h1>svn 源码泄露</h1><p><strong>成因</strong>：SVN（subversion）是源代码版本管理软件。在使用SVN管理本地代码过程中，会自动生成一个名为.svn的隐藏文件夹，其中包含重要的源代码信息。但一些网站管理员在发布代码时，不愿意使用‘导出’功能，而是直接复制代码文件夹到WEB服务器上，这就使.svn隐藏文件夹被暴露于外网环境，黑客可以借助其中包含的用于版本信息追踪的‘entries’文件，逐步摸清站点结构。</p><p><strong>工具</strong>：<a href="https://github.com/kost/dvcs-ripper" target="_blank" rel="noopener">dvcs-ripper</a>    seay-SVN  （<a href="http://pan.baidu.com/s/1mrNpB" target="_blank" rel="noopener">下载链接</a>）</p><p><strong>用法</strong>：<a href="http://rip-svn.pl" target="_blank" rel="noopener">rip-svn.pl</a> -v -u <a href="http://www.example.com/.svn/" target="_blank" rel="noopener">http://www.example.com/.svn/</a></p><h1>网站源码压缩备份泄露</h1><p><strong>成因</strong>：一般网站管理员在日常维护中，总会把网站源码给备份一下，防止网站出现问题时，能马上的恢复使用，不过一般的管理员安全意识不高，在备份的时候，会使用一些常见的压缩备份名，而且不光使用常见的备份名字，大部分的管理还会把备份好的源码直接放在网站根目录里，这样给一些不法之徒，提供了一个很方便的渗透思路，或者有些直接不需要渗透了，因为备份中的数据，就已经满足那些不法之徒的需求了。</p><p><strong>工具</strong>：这个其实不是靠工具的，是靠字典的，工具的话，网上任何能扫目录的工具，都可以用来探测源码备份的，不过常见的还是用的 御剑1.5 ，或者自己写的一些扫目录的小脚本工具。</p><h1>.DS_Store文件泄漏</h1><p><strong>成因</strong>：.DS_Store是Mac下Finder用来保存如何展示文件//文件夹的数据文件，每个文件夹下对应一个。由于开发/设计人员在发布代码时未删除文件夹中隐藏的.DS_store，可能造成文件目录结构泄漏、源代码文件等敏感信息的泄露。</p><p><strong>实例</strong>：TCL某网站DS_Store文件泄露敏感信息</p><p><strong>工具</strong>：<a href="https://github.com/lijiejie/ds_store_exp" target="_blank" rel="noopener">ds_store_exp</a></p><p><strong>方法</strong>：python ds_store_exp.py <a href="http://www.example.com/.DS_Store" target="_blank" rel="noopener">http://www.example.com/.DS_Store</a></p><h1>.hg源码泄露</h1><p><strong>成因</strong>：hg init的时候会生成.hg（网上资料较少）</p><p><strong>工具</strong>：<a href="https://github.com/kost/dvcs-ripper" target="_blank" rel="noopener">dvcs-ripper</a></p><p><strong>用法</strong>：<a href="http://rip-hg.pl" target="_blank" rel="noopener">rip-hg.pl</a> -v -u <a href="http://www.example.com/.hg/" target="_blank" rel="noopener">http://www.example.com/.hg/</a>  （如果想忽略SSL认证验证使用-s）</p><p><strong>--------------------------------------我不是分割线-------------------------------------</strong></p><p><strong>总结</strong>：源码泄露还有好几个，例如cvs泄露，bzr等，但是在实际的漏洞挖掘中，这些不常见，或者说就前三种，剩下的源码泄露的漏洞都是不好找。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;最近刷题遇到了一道git源码泄露的题目，查阅资料发现还有许多的源码泄露，写下此文记录一下常见的源码泄漏问题。&lt;/p&gt;
+&lt;h1&gt;.git源码泄露&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;成因&lt;/strong&gt;：在运行git init初始化代码库的时候，会在当前目录下面产生一个.git
+      
+    
+    </summary>
+    
+      <category term="web安全" scheme="https://13m0nade.github.io/categories/web%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="源码泄露" scheme="https://13m0nade.github.io/tags/%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/"/>
+    
+  </entry>
   
   <entry>
     <title>解锁SQL注入技能1</title>
