@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://13m0nade.github.io/"/>
-  <updated>2019-08-15T07:35:25.105Z</updated>
+  <updated>2019-08-26T07:00:05.222Z</updated>
   <id>https://13m0nade.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CBC字节翻转攻击和基于约束的SQL攻击</title>
+    <link href="https://13m0nade.github.io/2019/08/26/CBC%E5%AD%97%E8%8A%82%E7%BF%BB%E8%BD%AC%E6%94%BB%E5%87%BB%E5%92%8C%E5%9F%BA%E4%BA%8E%E7%BA%A6%E6%9D%9F%E7%9A%84SQL%E6%94%BB%E5%87%BB/"/>
+    <id>https://13m0nade.github.io/2019/08/26/CBC字节翻转攻击和基于约束的SQL攻击/</id>
+    <published>2019-08-26T06:52:35.000Z</published>
+    <updated>2019-08-26T07:00:05.222Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。</p><h1>CBC字节翻转攻击</h1><p>此攻击方法的精髓在于：<strong>通过损坏密文字节来改变明文字节</strong>。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。</p><p><strong>CBC原理</strong>：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。<strong>Ciphertext-N-1（密文-N-1）是用来产生下一块明文</strong>；这就是字节翻转攻击开始发挥作用的地方。如果我们改变<em>Ciphertext-N-1</em>（密文-N-1）的一个字节，然后与下一个解密后的组块异或，我们就可以得到一个不同的明文了。</p><p>假设我们输入用户名为admim密码为123，在序列化后得到明文a:2:{s:8:“username”;s:5:“admim”;s:8:“password”;s:3:“123”;}    把明文分为16个字节的块，这里我们需要将m改为n即可登录。m在第二组第13位，所以只需改变第一组13位即可。</p><p><strong>脚本</strong>：</p><ol><li><code>$v = &quot;a:2:{s:8:&quot;username&quot;;s:5:&quot;admim&quot;;s:8:&quot;password&quot;;s:3:&quot;123&quot;;}&quot;;</code></li><li><code>$enc = @encrypt($v);</code></li><li><code>$enc[13] = chr(ord($enc[13]) ^ ord(&quot;m&quot;) ^ ord (&quot;n&quot;));</code></li><li><code>$b = @decrypt($enc);</code></li></ol><p>运行结果admim变为admin</p><p><strong>解释</strong>：</p><p>第二块明文偏移量为13的字符© = 第一块密文偏移量为13的字符(A) ^ decrypt(第二块密文的偏移量为13的字符)(B)</p><p>即 C = A ^ B，这里我们知道C和A，因此B = A ^ C</p><p>假设我们修改A为A2，A2 = A ^ C ^ D（我们想要的字符，这里指n）</p><p>那么C = A2 ^ B = A ^ C ^ D ^ A ^ C = 0 ^ D  = D，即</p><p>$enc[13] = chr(ord($enc[13]) ^ ord(“m”) ^ ord (“n”))</p><p><strong>最后因为改了第一组所以还要改一下初始向量IV，也使用异或，new_iv = decrypt(第一块原密文) ^ 第一块正确明文 =  第一块错误明文 ^ ord_iv ^ 第一块正确明文</strong></p><p><strong>参考链接</strong>：<a href="https://www.freebuf.com/articles/system/163756.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/system/163756.html</a></p><p><a href="http://www.anquan.us/static/drops/tips-7828.html" target="_blank" rel="noopener">http://www.anquan.us/static/drops/tips-7828.html</a></p><h1>基于约束的SQL攻击</h1><p><strong>注意不是SQL注入攻击</strong></p><p>在SQL中执行字符串处理时，字符串末尾的空格符将会被删除。换句话说“vampire”等同于“vampire          ”，对于绝大多数情况来说都是成立的（诸如WHERE子句中的字符串或INSERT语句中的字符串）例如以下语句的查询结果，与使用用户名“vampire”进行查询时的结果是一样的。</p><p>SELECT * FROM users WHERE username='vampire     ';</p><p>但也存在异常情况，最好的例子就是LIKE子句了。注意，对尾部空白符的这种修剪操作，主要是在“字符串比较”期间进行的。这是因为，SQL会在<a href="https://support.microsoft.com/en-in/kb/316626" target="_blank" rel="noopener">内部</a>使用空格来填充字符串，以便在比较之前使其它们的长度保持一致。</p><p>在所有的INSERT查询中，SQL都会根据varchar(n)来限制字符串的最大长度。也就是说，如果字符串的长度大于“n”个字符的话，那么仅使用字符串的前“n”个字符。比如特定列的长度约束为“5”个字符，那么在插入字符串“vampire”时，实际上只能插入字符串的前5个字符，即“vampi”。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。&lt;/p&gt;
+&lt;h1&gt;CBC字节翻转攻击&lt;/h1&gt;
+&lt;p&gt;此攻击方法的精髓在于：&lt;strong&gt;通过损坏密文字节来改变明文字节&lt;/strong&gt;。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用
+      
+    
+    </summary>
+    
+      <category term="划水日常" scheme="https://13m0nade.github.io/categories/%E5%88%92%E6%B0%B4%E6%97%A5%E5%B8%B8/"/>
+    
+    
+      <category term="划水日常" scheme="https://13m0nade.github.io/tags/%E5%88%92%E6%B0%B4%E6%97%A5%E5%B8%B8/"/>
+    
+  </entry>
   
   <entry>
     <title>常见web源码泄露</title>

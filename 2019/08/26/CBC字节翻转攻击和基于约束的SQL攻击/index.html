@@ -7,26 +7,26 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>常见web源码泄露 | 13m0nade&#39;s blog</title>
+  <title>CBC字节翻转攻击和基于约束的SQL攻击 | 13m0nade&#39;s blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="源码泄露,">
+    <meta name="keywords" content="划水日常,">
   
 
-  <meta name="description" content="最近刷题遇到了一道git源码泄露的题目，查阅资料发现还有许多的源码泄露，写下此文记录一下常见的源码泄漏问题。 .git源码泄露 成因：在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。 工具：githack      dvcs-ripper 方">
-<meta name="keywords" content="源码泄露">
+  <meta name="description" content="最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。 CBC字节翻转攻击 此攻击方法的精髓在于：通过损坏密文字节来改变明文字节。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。 CBC原理：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。Ciphertext-N-1（密文-N-1）是用来产生下一块明文">
+<meta name="keywords" content="划水日常">
 <meta property="og:type" content="article">
-<meta property="og:title" content="常见web源码泄露">
-<meta property="og:url" content="https://13m0nade.github.io/2019/08/15/常见web源码泄露/index.html">
+<meta property="og:title" content="CBC字节翻转攻击和基于约束的SQL攻击">
+<meta property="og:url" content="https://13m0nade.github.io/2019/08/26/CBC字节翻转攻击和基于约束的SQL攻击/index.html">
 <meta property="og:site_name" content="13m0nade&#39;s blog">
-<meta property="og:description" content="最近刷题遇到了一道git源码泄露的题目，查阅资料发现还有许多的源码泄露，写下此文记录一下常见的源码泄漏问题。 .git源码泄露 成因：在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。 工具：githack      dvcs-ripper 方">
+<meta property="og:description" content="最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。 CBC字节翻转攻击 此攻击方法的精髓在于：通过损坏密文字节来改变明文字节。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。 CBC原理：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。Ciphertext-N-1（密文-N-1）是用来产生下一块明文">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-15T07:35:25.105Z">
+<meta property="og:updated_time" content="2019-08-26T07:00:05.222Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="常见web源码泄露">
-<meta name="twitter:description" content="最近刷题遇到了一道git源码泄露的题目，查阅资料发现还有许多的源码泄露，写下此文记录一下常见的源码泄漏问题。 .git源码泄露 成因：在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。 工具：githack      dvcs-ripper 方">
+<meta name="twitter:title" content="CBC字节翻转攻击和基于约束的SQL攻击">
+<meta name="twitter:description" content="最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。 CBC字节翻转攻击 此攻击方法的精髓在于：通过损坏密文字节来改变明文字节。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。 CBC原理：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。Ciphertext-N-1（密文-N-1）是用来产生下一块明文">
 
   
 
@@ -158,20 +158,20 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">.git源码泄露</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">svn 源码泄露</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">网站源码压缩备份泄露</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">.DS_Store文件泄漏</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">.hg源码泄露</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">CBC字节翻转攻击</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">基于约束的SQL攻击</span></a></li></ol>
   </div>
 
 
 
 <div class="content content-post CENTER">
-   <article id="post-常见web源码泄露" class="article article-type-post" itemprop="blogPost">
+   <article id="post-CBC字节翻转攻击和基于约束的SQL攻击" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">常见web源码泄露</h1>
+    <h1 class="post-title">CBC字节翻转攻击和基于约束的SQL攻击</h1>
 
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2019.08.15</span>
+        <span>2019.08.26</span>
       </span>
 
       
@@ -184,7 +184,7 @@
       
   <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/web安全/">web安全</a>
+    <a class="article-category-link" href="/categories/划水日常/">划水日常</a>
   </span>
 
 
@@ -204,34 +204,34 @@
 
   <div class="article-content">
     
-      <p>最近刷题遇到了一道git源码泄露的题目，查阅资料发现还有许多的源码泄露，写下此文记录一下常见的源码泄漏问题。</p>
-<h1>.git源码泄露</h1>
-<p><strong>成因</strong>：在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。</p>
-<p><strong>工具</strong>：<a href="https://github.com/lijiejie/GitHack" target="_blank" rel="noopener">githack</a>      <a href="https://github.com/kost/dvcs-ripper" target="_blank" rel="noopener">dvcs-ripper</a></p>
-<p><strong>方法</strong>：</p>
+      <p>最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。</p>
+<h1>CBC字节翻转攻击</h1>
+<p>此攻击方法的精髓在于：<strong>通过损坏密文字节来改变明文字节</strong>。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。</p>
+<p><strong>CBC原理</strong>：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。<strong>Ciphertext-N-1（密文-N-1）是用来产生下一块明文</strong>；这就是字节翻转攻击开始发挥作用的地方。如果我们改变<em>Ciphertext-N-1</em>（密文-N-1）的一个字节，然后与下一个解密后的组块异或，我们就可以得到一个不同的明文了。</p>
+<p>假设我们输入用户名为admim密码为123，在序列化后得到明文a:2:{s:8:“username”;s:5:“admim”;s:8:“password”;s:3:“123”;}    把明文分为16个字节的块，这里我们需要将m改为n即可登录。m在第二组第13位，所以只需改变第一组13位即可。</p>
+<p><strong>脚本</strong>：</p>
 <ol>
-<li><a href="http://GitHack.py" target="_blank" rel="noopener">GitHack.py</a> <a href="http://www.example.com/.git/" target="_blank" rel="noopener">http://www.example.com/.git/</a></li>
-<li><a href="http://rip-git.pl" target="_blank" rel="noopener">rip-git.pl</a> -v -u <a href="http://www.example.com/.git/" target="_blank" rel="noopener">http://www.example.com/.git/</a>  （如果想忽略SSL认证验证使用-s）</li>
-<li>爬虫爬取整个git目录 (这个方法比较原始 , 需要具有一定的Git经验 , 这里重点介绍这种方法 , 但是这种方法和使用githack这个工具相比 , 有一个比较好的地方就是 , 可以完全模拟服务器上的代码环境 , 可以跟踪到git的每一次提交 , 但是githack好像只可以将源码恢复到最近的一次提交 , 这里的好处还有可以去查看git的提交日志 , 这个日志信息中会有开发人员对每一次commit的描述 , 比如某个BUG的修复等等 , 对于这些和BUG相关的地方 , 可以有针对性地进行白盒审计 , 有可能这个BUG修复了还不如没修复 , 可能会造成更大的漏洞)</li>
+<li><code>$v = &quot;a:2:{s:8:&quot;username&quot;;s:5:&quot;admim&quot;;s:8:&quot;password&quot;;s:3:&quot;123&quot;;}&quot;;</code></li>
+<li><code>$enc = @encrypt($v);</code></li>
+<li><code>$enc[13] = chr(ord($enc[13]) ^ ord(&quot;m&quot;) ^ ord (&quot;n&quot;));</code></li>
+<li><code>$b = @decrypt($enc);</code></li>
 </ol>
-<h1>svn 源码泄露</h1>
-<p><strong>成因</strong>：SVN（subversion）是源代码版本管理软件。在使用SVN管理本地代码过程中，会自动生成一个名为.svn的隐藏文件夹，其中包含重要的源代码信息。但一些网站管理员在发布代码时，不愿意使用‘导出’功能，而是直接复制代码文件夹到WEB服务器上，这就使.svn隐藏文件夹被暴露于外网环境，黑客可以借助其中包含的用于版本信息追踪的‘entries’文件，逐步摸清站点结构。</p>
-<p><strong>工具</strong>：<a href="https://github.com/kost/dvcs-ripper" target="_blank" rel="noopener">dvcs-ripper</a>    seay-SVN  （<a href="http://pan.baidu.com/s/1mrNpB" target="_blank" rel="noopener">下载链接</a>）</p>
-<p><strong>用法</strong>：<a href="http://rip-svn.pl" target="_blank" rel="noopener">rip-svn.pl</a> -v -u <a href="http://www.example.com/.svn/" target="_blank" rel="noopener">http://www.example.com/.svn/</a></p>
-<h1>网站源码压缩备份泄露</h1>
-<p><strong>成因</strong>：一般网站管理员在日常维护中，总会把网站源码给备份一下，防止网站出现问题时，能马上的恢复使用，不过一般的管理员安全意识不高，在备份的时候，会使用一些常见的压缩备份名，而且不光使用常见的备份名字，大部分的管理还会把备份好的源码直接放在网站根目录里，这样给一些不法之徒，提供了一个很方便的渗透思路，或者有些直接不需要渗透了，因为备份中的数据，就已经满足那些不法之徒的需求了。</p>
-<p><strong>工具</strong>：这个其实不是靠工具的，是靠字典的，工具的话，网上任何能扫目录的工具，都可以用来探测源码备份的，不过常见的还是用的 御剑1.5 ，或者自己写的一些扫目录的小脚本工具。</p>
-<h1>.DS_Store文件泄漏</h1>
-<p><strong>成因</strong>：.DS_Store是Mac下Finder用来保存如何展示文件//文件夹的数据文件，每个文件夹下对应一个。由于开发/设计人员在发布代码时未删除文件夹中隐藏的.DS_store，可能造成文件目录结构泄漏、源代码文件等敏感信息的泄露。</p>
-<p><strong>实例</strong>：TCL某网站DS_Store文件泄露敏感信息</p>
-<p><strong>工具</strong>：<a href="https://github.com/lijiejie/ds_store_exp" target="_blank" rel="noopener">ds_store_exp</a></p>
-<p><strong>方法</strong>：python ds_store_exp.py <a href="http://www.example.com/.DS_Store" target="_blank" rel="noopener">http://www.example.com/.DS_Store</a></p>
-<h1>.hg源码泄露</h1>
-<p><strong>成因</strong>：hg init的时候会生成.hg（网上资料较少）</p>
-<p><strong>工具</strong>：<a href="https://github.com/kost/dvcs-ripper" target="_blank" rel="noopener">dvcs-ripper</a></p>
-<p><strong>用法</strong>：<a href="http://rip-hg.pl" target="_blank" rel="noopener">rip-hg.pl</a> -v -u <a href="http://www.example.com/.hg/" target="_blank" rel="noopener">http://www.example.com/.hg/</a>  （如果想忽略SSL认证验证使用-s）</p>
-<p><strong>--------------------------------------我不是分割线-------------------------------------</strong></p>
-<p><strong>总结</strong>：源码泄露还有好几个，例如cvs泄露，bzr等，但是在实际的漏洞挖掘中，这些不常见，或者说就前三种，剩下的源码泄露的漏洞都是不好找。</p>
+<p>运行结果admim变为admin</p>
+<p><strong>解释</strong>：</p>
+<p>第二块明文偏移量为13的字符© = 第一块密文偏移量为13的字符(A) ^ decrypt(第二块密文的偏移量为13的字符)(B)</p>
+<p>即 C = A ^ B，这里我们知道C和A，因此B = A ^ C</p>
+<p>假设我们修改A为A2，A2 = A ^ C ^ D（我们想要的字符，这里指n）</p>
+<p>那么C = A2 ^ B = A ^ C ^ D ^ A ^ C = 0 ^ D  = D，即</p>
+<p>$enc[13] = chr(ord($enc[13]) ^ ord(“m”) ^ ord (“n”))</p>
+<p><strong>最后因为改了第一组所以还要改一下初始向量IV，也使用异或，new_iv = decrypt(第一块原密文) ^ 第一块正确明文 =  第一块错误明文 ^ ord_iv ^ 第一块正确明文</strong></p>
+<p><strong>参考链接</strong>：<a href="https://www.freebuf.com/articles/system/163756.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/system/163756.html</a></p>
+<p><a href="http://www.anquan.us/static/drops/tips-7828.html" target="_blank" rel="noopener">http://www.anquan.us/static/drops/tips-7828.html</a></p>
+<h1>基于约束的SQL攻击</h1>
+<p><strong>注意不是SQL注入攻击</strong></p>
+<p>在SQL中执行字符串处理时，字符串末尾的空格符将会被删除。换句话说“vampire”等同于“vampire          ”，对于绝大多数情况来说都是成立的（诸如WHERE子句中的字符串或INSERT语句中的字符串）例如以下语句的查询结果，与使用用户名“vampire”进行查询时的结果是一样的。</p>
+<p>SELECT * FROM users WHERE username='vampire     ';</p>
+<p>但也存在异常情况，最好的例子就是LIKE子句了。注意，对尾部空白符的这种修剪操作，主要是在“字符串比较”期间进行的。这是因为，SQL会在<a href="https://support.microsoft.com/en-in/kb/316626" target="_blank" rel="noopener">内部</a>使用空格来填充字符串，以便在比较之前使其它们的长度保持一致。</p>
+<p>在所有的INSERT查询中，SQL都会根据varchar(n)来限制字符串的最大长度。也就是说，如果字符串的长度大于“n”个字符的话，那么仅使用字符串的前“n”个字符。比如特定列的长度约束为“5”个字符，那么在插入字符串“vampire”时，实际上只能插入字符串的前5个字符，即“vampi”。</p>
 
     
   </div>
@@ -262,10 +262,10 @@
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2019/08/06/解锁SQL注入技能1/">
+    <a class="show pull-left" href="/2019/08/15/常见web源码泄露/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2019/08/26/CBC字节翻转攻击和基于约束的SQL攻击/">
+    <a class="hide pull-right" href="/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
