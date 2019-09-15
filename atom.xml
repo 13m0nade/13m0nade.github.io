@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://13m0nade.github.io/"/>
-  <updated>2019-08-26T07:00:05.222Z</updated>
+  <updated>2019-09-15T08:51:12.943Z</updated>
   <id>https://13m0nade.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>php协议的应用</title>
+    <link href="https://13m0nade.github.io/2019/09/15/php%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%BA%94%E7%94%A8/"/>
+    <id>https://13m0nade.github.io/2019/09/15/php协议的应用/</id>
+    <published>2019-09-15T08:43:30.000Z</published>
+    <updated>2019-09-15T08:51:12.943Z</updated>
+    
+    <content type="html"><![CDATA[<h1><strong>宽字节注入</strong></h1><p>前提条件：set character_set_client=gbk。</p><p>作用：当注入的参数中带有%df%27时，可把过滤的\（%5C）去掉。</p><p>原理：在注入时，‘被过滤自动转义为\’，加上%df后可以与\（%5c）形成“運”字单引号还在，成功闭合。</p><h1><strong>PHP://的应用</strong></h1><p><strong>常见访问方式：</strong>(加粗为常用)</p><p>php://stdin</p><p>php://stdout</p><p>php://stderr</p><p><strong>php://input</strong></p><p><strong>php://output</strong></p><p>php://fd</p><p>php://memory</p><p>php://temp</p><p><strong>php://filter</strong></p><p><strong>解析</strong>：</p><p><strong>php://input</strong>：只读流，可直接读取POST没经过解析的原始数据，不能获取“multipart/from-data方式提交的数据。</p><p><strong>php://output</strong>：只写流，将流数据输出。</p><p><strong>php://filter</strong>：可对磁盘文件进行读写操作，类似于readfile（），file（）等，他有多个参数可以选择：</p><table><thead><tr><th style="text-align:center">名称</th><th style="text-align:center">描述</th></tr></thead><tbody><tr><td style="text-align:center">resource=&lt;要过滤的数据流&gt;</td><td style="text-align:center">必需。指定要筛选过滤的数据流。</td></tr><tr><td style="text-align:center">read=&lt;独链的筛选列表&gt;</td><td style="text-align:center">可选。设置1个或多个过滤器名称，以管道符|分隔</td></tr><tr><td style="text-align:center">该参数可选。设置1个或多个过滤器名称，以管道符|分隔</td><td style="text-align:center">可选。设置1个或多个过滤器名称，以管道符|分隔</td></tr><tr><td style="text-align:center">&lt;;两个链的筛选列表&gt;</td><td style="text-align:center">任何没有以read=或write=做前缀的筛选列表视情况用作读或写链</td></tr></tbody></table><p><strong>php://filter使用：</strong></p><p>XXE</p><p>由于XXE漏洞的特殊性，我们在读取HTML、PHP等文件时可能会抛出此类错误<code>parser error : StartTag: invalid element name</code> 。其原因是，PHP是基于标签的脚本语言，<code>&lt;?php ... ?&gt;</code>这个语法也与XML相符合，所以在解析XML的时候会被误认为是XML，而其中内容（比如特殊字符）又有可能和标准XML冲突，所以导致了出错。为了读取包含有敏感信息的PHP等源文件，我们就要先将“可能引发冲突的PHP代码”编码一遍，这里就会用到php://filter，这样就能有效规避特殊字符造成混乱。例如：<strong>php://filter/read=convert.base64-encode/resource=./xxe.php</strong></p><p>编码解码</p><p>base64编码中只包含64个可打印字符，而PHP在解码base64时，遇到不在其中的字符时，将会跳过这些字符，仅将合法字符组成一个新的字符串进行解码。使<strong>php://filter/write=convert.base64-decode</strong> 可以绕过&lt;? php exit; &gt;的限制。</p><p>字符串</p><? php exit; >实际上是一个XML标签，既然是XML标签，我们就可以利用strip_tags函数去除它。使用 **php://filter/read=string.strip_tags/resource=php://input**即可去除。又因为需要写入webshell，在调用完成strip_tags后再进行base64-decode。**PS：php://filter允许使用多个过滤器，以管道符(|)分隔。**参考资料：https://www.leavesongs.com/PENETRATION/php-filter-magic.html]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;&lt;strong&gt;宽字节注入&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;前提条件：set character_set_client=gbk。&lt;/p&gt;
+&lt;p&gt;作用：当注入的参数中带有%df%27时，可把过滤的\（%5C）去掉。&lt;/p&gt;
+&lt;p&gt;原理：在注入时，‘被过滤自动转义为\’，加
+      
+    
+    </summary>
+    
+      <category term="web安全" scheme="https://13m0nade.github.io/categories/web%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="奇技淫巧" scheme="https://13m0nade.github.io/tags/%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/"/>
+    
+  </entry>
   
   <entry>
     <title>CBC字节翻转攻击和基于约束的SQL攻击</title>

@@ -7,26 +7,26 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>CBC字节翻转攻击和基于约束的SQL攻击 | 13m0nade&#39;s blog</title>
+  <title>php协议的应用 | 13m0nade&#39;s blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="划水日常,">
+    <meta name="keywords" content="奇技淫巧,">
   
 
-  <meta name="description" content="最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。 CBC字节翻转攻击 此攻击方法的精髓在于：通过损坏密文字节来改变明文字节。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。 CBC原理：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。Ciphertext-N-1（密文-N-1）是用来产生下一块明文">
-<meta name="keywords" content="划水日常">
+  <meta name="description" content="宽字节注入 前提条件：set character_set_client=gbk。 作用：当注入的参数中带有%df%27时，可把过滤的\（%5C）去掉。 原理：在注入时，‘被过滤自动转义为\’，加上%df后可以与\（%5c）形成“運”字单引号还在，成功闭合。 PHP://的应用 常见访问方式：(加粗为常用) php://stdin php://stdout php://stderr php://in">
+<meta name="keywords" content="奇技淫巧">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CBC字节翻转攻击和基于约束的SQL攻击">
-<meta property="og:url" content="https://13m0nade.github.io/2019/08/26/CBC字节翻转攻击和基于约束的SQL攻击/index.html">
+<meta property="og:title" content="php协议的应用">
+<meta property="og:url" content="https://13m0nade.github.io/2019/09/15/php协议的应用/index.html">
 <meta property="og:site_name" content="13m0nade&#39;s blog">
-<meta property="og:description" content="最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。 CBC字节翻转攻击 此攻击方法的精髓在于：通过损坏密文字节来改变明文字节。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。 CBC原理：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。Ciphertext-N-1（密文-N-1）是用来产生下一块明文">
+<meta property="og:description" content="宽字节注入 前提条件：set character_set_client=gbk。 作用：当注入的参数中带有%df%27时，可把过滤的\（%5C）去掉。 原理：在注入时，‘被过滤自动转义为\’，加上%df后可以与\（%5c）形成“運”字单引号还在，成功闭合。 PHP://的应用 常见访问方式：(加粗为常用) php://stdin php://stdout php://stderr php://in">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-26T07:00:05.222Z">
+<meta property="og:updated_time" content="2019-09-15T08:51:12.943Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CBC字节翻转攻击和基于约束的SQL攻击">
-<meta name="twitter:description" content="最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。 CBC字节翻转攻击 此攻击方法的精髓在于：通过损坏密文字节来改变明文字节。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。 CBC原理：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。Ciphertext-N-1（密文-N-1）是用来产生下一块明文">
+<meta name="twitter:title" content="php协议的应用">
+<meta name="twitter:description" content="宽字节注入 前提条件：set character_set_client=gbk。 作用：当注入的参数中带有%df%27时，可把过滤的\（%5C）去掉。 原理：在注入时，‘被过滤自动转义为\’，加上%df后可以与\（%5c）形成“運”字单引号还在，成功闭合。 PHP://的应用 常见访问方式：(加粗为常用) php://stdin php://stdout php://stderr php://in">
 
   
 
@@ -158,20 +158,20 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">CBC字节翻转攻击</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">基于约束的SQL攻击</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">宽字节注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-text">PHP://的应用</span></a></li></ol>
   </div>
 
 
 
 <div class="content content-post CENTER">
-   <article id="post-CBC字节翻转攻击和基于约束的SQL攻击" class="article article-type-post" itemprop="blogPost">
+   <article id="post-php协议的应用" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">CBC字节翻转攻击和基于约束的SQL攻击</h1>
+    <h1 class="post-title">php协议的应用</h1>
 
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2019.08.26</span>
+        <span>2019.09.15</span>
       </span>
 
       
@@ -184,7 +184,7 @@
       
   <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/划水日常/">划水日常</a>
+    <a class="article-category-link" href="/categories/web安全/">web安全</a>
   </span>
 
 
@@ -204,34 +204,65 @@
 
   <div class="article-content">
     
-      <p>最近划水严重，反正水了一水到底，再水一篇文章，记录划水的学习。</p>
-<h1>CBC字节翻转攻击</h1>
-<p>此攻击方法的精髓在于：<strong>通过损坏密文字节来改变明文字节</strong>。借由CBC可以绕过过滤器，或者改变用户权限提升至管理员，又或者改变应用程序预期明文以尽猥琐之事。</p>
-<p><strong>CBC原理</strong>：对于密码学有了解的对于CBC应该不陌生，在这里就不多讲了，需要注意的是明文、密文、IV。<strong>Ciphertext-N-1（密文-N-1）是用来产生下一块明文</strong>；这就是字节翻转攻击开始发挥作用的地方。如果我们改变<em>Ciphertext-N-1</em>（密文-N-1）的一个字节，然后与下一个解密后的组块异或，我们就可以得到一个不同的明文了。</p>
-<p>假设我们输入用户名为admim密码为123，在序列化后得到明文a:2:{s:8:“username”;s:5:“admim”;s:8:“password”;s:3:“123”;}    把明文分为16个字节的块，这里我们需要将m改为n即可登录。m在第二组第13位，所以只需改变第一组13位即可。</p>
-<p><strong>脚本</strong>：</p>
-<ol>
-<li><code>$v = &quot;a:2:{s:8:&quot;username&quot;;s:5:&quot;admim&quot;;s:8:&quot;password&quot;;s:3:&quot;123&quot;;}&quot;;</code></li>
-<li><code>$enc = @encrypt($v);</code></li>
-<li><code>$enc[13] = chr(ord($enc[13]) ^ ord(&quot;m&quot;) ^ ord (&quot;n&quot;));</code></li>
-<li><code>$b = @decrypt($enc);</code></li>
-</ol>
-<p>运行结果admim变为admin</p>
-<p><strong>解释</strong>：</p>
-<p>第二块明文偏移量为13的字符© = 第一块密文偏移量为13的字符(A) ^ decrypt(第二块密文的偏移量为13的字符)(B)</p>
-<p>即 C = A ^ B，这里我们知道C和A，因此B = A ^ C</p>
-<p>假设我们修改A为A2，A2 = A ^ C ^ D（我们想要的字符，这里指n）</p>
-<p>那么C = A2 ^ B = A ^ C ^ D ^ A ^ C = 0 ^ D  = D，即</p>
-<p>$enc[13] = chr(ord($enc[13]) ^ ord(“m”) ^ ord (“n”))</p>
-<p><strong>最后因为改了第一组所以还要改一下初始向量IV，也使用异或，new_iv = decrypt(第一块原密文) ^ 第一块正确明文 =  第一块错误明文 ^ ord_iv ^ 第一块正确明文</strong></p>
-<p><strong>参考链接</strong>：<a href="https://www.freebuf.com/articles/system/163756.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/system/163756.html</a></p>
-<p><a href="http://www.anquan.us/static/drops/tips-7828.html" target="_blank" rel="noopener">http://www.anquan.us/static/drops/tips-7828.html</a></p>
-<h1>基于约束的SQL攻击</h1>
-<p><strong>注意不是SQL注入攻击</strong></p>
-<p>在SQL中执行字符串处理时，字符串末尾的空格符将会被删除。换句话说“vampire”等同于“vampire          ”，对于绝大多数情况来说都是成立的（诸如WHERE子句中的字符串或INSERT语句中的字符串）例如以下语句的查询结果，与使用用户名“vampire”进行查询时的结果是一样的。</p>
-<p>SELECT * FROM users WHERE username='vampire     ';</p>
-<p>但也存在异常情况，最好的例子就是LIKE子句了。注意，对尾部空白符的这种修剪操作，主要是在“字符串比较”期间进行的。这是因为，SQL会在<a href="https://support.microsoft.com/en-in/kb/316626" target="_blank" rel="noopener">内部</a>使用空格来填充字符串，以便在比较之前使其它们的长度保持一致。</p>
-<p>在所有的INSERT查询中，SQL都会根据varchar(n)来限制字符串的最大长度。也就是说，如果字符串的长度大于“n”个字符的话，那么仅使用字符串的前“n”个字符。比如特定列的长度约束为“5”个字符，那么在插入字符串“vampire”时，实际上只能插入字符串的前5个字符，即“vampi”。</p>
+      <h1><strong>宽字节注入</strong></h1>
+<p>前提条件：set character_set_client=gbk。</p>
+<p>作用：当注入的参数中带有%df%27时，可把过滤的\（%5C）去掉。</p>
+<p>原理：在注入时，‘被过滤自动转义为\’，加上%df后可以与\（%5c）形成“運”字单引号还在，成功闭合。</p>
+<h1><strong>PHP://的应用</strong></h1>
+<p><strong>常见访问方式：</strong>(加粗为常用)</p>
+<p>php://stdin</p>
+<p>php://stdout</p>
+<p>php://stderr</p>
+<p><strong>php://input</strong></p>
+<p><strong>php://output</strong></p>
+<p>php://fd</p>
+<p>php://memory</p>
+<p>php://temp</p>
+<p><strong>php://filter</strong></p>
+<p><strong>解析</strong>：</p>
+<p><strong>php://input</strong>：只读流，可直接读取POST没经过解析的原始数据，不能获取“multipart/from-data方式提交的数据。</p>
+<p><strong>php://output</strong>：只写流，将流数据输出。</p>
+<p><strong>php://filter</strong>：可对磁盘文件进行读写操作，类似于readfile（），file（）等，他有多个参数可以选择：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">resource=&lt;要过滤的数据流&gt;</td>
+<td style="text-align:center">必需。指定要筛选过滤的数据流。</td>
+</tr>
+<tr>
+<td style="text-align:center">read=&lt;独链的筛选列表&gt;</td>
+<td style="text-align:center">可选。设置1个或多个过滤器名称，以管道符|分隔</td>
+</tr>
+<tr>
+<td style="text-align:center">该参数可选。设置1个或多个过滤器名称，以管道符|分隔</td>
+<td style="text-align:center">可选。设置1个或多个过滤器名称，以管道符|分隔</td>
+</tr>
+<tr>
+<td style="text-align:center">&lt;;两个链的筛选列表&gt;</td>
+<td style="text-align:center">任何没有以read=或write=做前缀的筛选列表视情况用作读或写链</td>
+</tr>
+</tbody>
+</table>
+<p><strong>php://filter使用：</strong></p>
+<p>XXE</p>
+<p>由于XXE漏洞的特殊性，我们在读取HTML、PHP等文件时可能会抛出此类错误<code>parser error : StartTag: invalid element name</code> 。其原因是，PHP是基于标签的脚本语言，<code>&lt;?php ... ?&gt;</code>这个语法也与XML相符合，所以在解析XML的时候会被误认为是XML，而其中内容（比如特殊字符）又有可能和标准XML冲突，所以导致了出错。为了读取包含有敏感信息的PHP等源文件，我们就要先将“可能引发冲突的PHP代码”编码一遍，这里就会用到php://filter，这样就能有效规避特殊字符造成混乱。例如：<strong>php://filter/read=convert.base64-encode/resource=./xxe.php</strong></p>
+<p>编码解码</p>
+<p>base64编码中只包含64个可打印字符，而PHP在解码base64时，遇到不在其中的字符时，将会跳过这些字符，仅将合法字符组成一个新的字符串进行解码。使<strong>php://filter/write=convert.base64-decode</strong> 可以绕过&lt;? php exit; &gt;的限制。</p>
+<p>字符串</p>
+<? php exit; >实际上是一个XML标签，既然是XML标签，我们就可以利用strip_tags函数去除它。使用 **php://filter/read=string.strip_tags/resource=php://input**即可去除。又因为需要写入webshell，在调用完成strip_tags后再进行base64-decode。
+
+**PS：php://filter允许使用多个过滤器，以管道符(|)分隔。**
+
+参考资料：
+
+https://www.leavesongs.com/PENETRATION/php-filter-magic.html
+
 
     
   </div>
@@ -262,10 +293,10 @@
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2019/08/15/常见web源码泄露/">
+    <a class="show pull-left" href="/2019/08/26/CBC字节翻转攻击和基于约束的SQL攻击/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2019/09/15/php协议的应用/">
+    <a class="hide pull-right" href="/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
