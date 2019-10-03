@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://13m0nade.github.io/"/>
-  <updated>2019-09-15T08:51:12.943Z</updated>
+  <updated>2019-10-03T13:09:42.159Z</updated>
   <id>https://13m0nade.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>有趣的树莓派</title>
+    <link href="https://13m0nade.github.io/2019/10/03/%E6%9C%89%E8%B6%A3%E7%9A%84%E6%A0%91%E8%8E%93%E6%B4%BE/"/>
+    <id>https://13m0nade.github.io/2019/10/03/有趣的树莓派/</id>
+    <published>2019-10-03T13:07:29.000Z</published>
+    <updated>2019-10-03T13:09:42.159Z</updated>
+    
+    <content type="html"><![CDATA[<h1>有趣的树莓派</h1><p>最近玩了下树莓派，感觉还不错，来此分享一下树莓派工作的基本配置。如果你是高端玩家有显示屏，请忽略。</p><p><strong>前期准备工作：</strong></p><ol><li>树莓派大小只有一张银行卡大小，因此他不能拥有庞大的硬盘，所以我们用CD/TF卡（根据树莓派型号来定），大小8G以上，最好不要超过64G。</li><li>将SD/TF卡格式化，使用工具（win32diskImager）将系统烧入进卡内，成功后发现只有几百MB剩余空间，不用紧张因为linux文件系统无法在windows上显示，插上树莓派即可。</li><li>给树莓派插上网线，在路由器设置里找到ip（名字为raspberry），使用ssh工具连接，默认用户名pi，密码raspberry。连接成功后即可开始配置。</li></ol><p><strong>添加无线网：</strong></p><p>3B以后的树莓派自带无线，只需添加即可，首先使用命令扫描区域内WiFi</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iwlist wlan0 scan</span><br></pre></td></tr></table></figure><p>在使用命令添加WiFi信息</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf</span><br></pre></td></tr></table></figure><p>添加的内容为扫描得到的无线信息（支持添加多个）</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev</span><br><span class="line">update_config=1</span><br><span class="line">country=CN</span><br><span class="line"> </span><br><span class="line">network=&#123;</span><br><span class="line">        ssid=&quot;@PHICOMM_18&quot;</span><br><span class="line">        psk=&quot;92203333&quot;</span><br><span class="line">        key_mgmt=WPA-PSK</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>sudo /etc/init.d/networking restart 重启wifi即可，成功就显示OK。</p><p><strong>可视化桌面：</strong></p><p>如果不习惯命令行操作，可以使用vnc工具显示可视化桌面。</p><p>首先在树莓派安装vnc</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install tightvncserver</span><br></pre></td></tr></table></figure><p>然后设置密码，设置完密码后会询问是否view only，一般选no</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncpasswd</span><br></pre></td></tr></table></figure><p>设置桌面名称和分辨率</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vncserver :1 -geometry 1024x768</span><br></pre></td></tr></table></figure><p><a href="http://xn--xxx-vs9dy9uoz5a.xxx.xxx.xxx:1" target="_blank" rel="noopener">最后以xxx.xxx.xxx.xxx:1</a>(1为设置的桌面名称)连接。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1&gt;有趣的树莓派&lt;/h1&gt;
+&lt;p&gt;最近玩了下树莓派，感觉还不错，来此分享一下树莓派工作的基本配置。如果你是高端玩家有显示屏，请忽略。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;前期准备工作：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;树莓派大小只有一张银行卡大小，因此他不能拥有庞大的硬
+      
+    
+    </summary>
+    
+      <category term="经验分享" scheme="https://13m0nade.github.io/categories/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/"/>
+    
+    
+      <category term="树莓派" scheme="https://13m0nade.github.io/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/"/>
+    
+  </entry>
   
   <entry>
     <title>php协议的应用</title>
